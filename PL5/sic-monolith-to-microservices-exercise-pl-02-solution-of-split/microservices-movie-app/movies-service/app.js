@@ -3,7 +3,7 @@ const axios = require("axios");
 
 let movies = [
   { id: 1, title: "Treasure Planet", year: 2002 },
-  { id: 2, title: "The Matrix", year: 1999 }
+  { id: 2, title: "The Matrix", year: 1999 },
 ];
 
 const typeDefs = gql`
@@ -36,18 +36,28 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     movies: async () => {
-      // Para cada filme, buscar reviews
-      return Promise.all(movies.map(async (movie) => {
-        const response = await axios.get(`http://localhost:3002/reviews?movieId=${movie.id}`);
-        return { ...movie, reviews: response.data };
-      }));
+      return Promise.all(
+        movies.map(async (movie) => {
+          try {
+            const response = await axios.get(
+              `http://10.0.2.15/reviews?movieId=${movie.id}`
+            );
+            return { ...movie, reviews: response.data };
+          } catch (err) {
+            console.error("Error fetching reviews:", err.message);
+            return { ...movie, reviews: [] };
+          }
+        })
+      );
     },
     movie: async (_, { id }) => {
-      const movie = movies.find(m => m.id === parseInt(id));
+      const movie = movies.find((m) => m.id === parseInt(id));
       if (!movie) throw new Error("Movie not found");
-      const response = await axios.get(`http://localhost:3002/reviews?movieId=${movie.id}`);
+      const response = await axios.get(
+        `http://10.0.2.15/reviews?movieId=${movie.id}`
+      );
       return { ...movie, reviews: response.data };
-    }
+    },
   },
   Mutation: {
     addMovie: (_, { title, year }) => {
@@ -56,19 +66,19 @@ const resolvers = {
       return newMovie;
     },
     updateMovie: (_, { id, title, year }) => {
-      const movie = movies.find(m => m.id === parseInt(id));
+      const movie = movies.find((m) => m.id === parseInt(id));
       if (!movie) throw new Error("Movie not found");
       if (title) movie.title = title;
       if (year) movie.year = year;
       return movie;
     },
     deleteMovie: (_, { id }) => {
-      const index = movies.findIndex(m => m.id === parseInt(id));
+      const index = movies.findIndex((m) => m.id === parseInt(id));
       if (index === -1) throw new Error("Movie not found");
       movies.splice(index, 1);
       return "Movie deleted";
-    }
-  }
+    },
+  },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
