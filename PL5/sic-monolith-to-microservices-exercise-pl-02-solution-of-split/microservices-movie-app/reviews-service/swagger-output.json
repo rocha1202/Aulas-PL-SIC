@@ -1,0 +1,227 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Reviews Microservice API",
+    "description": "Swagger documentation for the Reviews service",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3002",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Reviews",
+      "description": "Endpoints related to movie reviews"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/reviews": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "query",
+            "description": "Filter reviews by movie ID",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of reviews",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Review"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Reviews"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "New review",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReviewInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Review created successfully",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{id}": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the review"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review obtained successfully",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Reviews"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the review"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated review data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ReviewInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reviews"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the review"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deleted successfully"
+          },
+          "404": {
+            "description": "Review not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Review": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "movieId": {
+          "type": "number",
+          "example": 1
+        },
+        "userId": {
+          "type": "number",
+          "example": 2
+        },
+        "text": {
+          "type": "string",
+          "example": "Very underrated movie!"
+        }
+      }
+    },
+    "ReviewInput": {
+      "type": "object",
+      "properties": {
+        "movieId": {
+          "type": "number",
+          "example": 1
+        },
+        "userId": {
+          "type": "number",
+          "example": 2
+        },
+        "text": {
+          "type": "string",
+          "example": "Your review text here"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Review not found"
+        }
+      }
+    },
+    "DeleteResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Review deleted"
+        }
+      }
+    }
+  }
+}

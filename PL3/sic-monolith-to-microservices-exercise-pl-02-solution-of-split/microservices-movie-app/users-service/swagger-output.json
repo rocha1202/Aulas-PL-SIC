@@ -1,0 +1,195 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Users Microservice API",
+    "description": "Swagger documentation",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3003",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users related endpoints"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of all users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetUser"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Novo utilizador",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Utilizador criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetUser"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Email já existe"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do utilizador"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilizador obtido com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetUser"
+            }
+          },
+          "404": {
+            "description": "Utilizador não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do utilizador"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Dados atualizados do utilizador",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilizador atualizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetUser"
+            }
+          },
+          "404": {
+            "description": "Utilizador não encontrado"
+          },
+          "409": {
+            "description": "Email já existe"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do utilizador"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilizador eliminado com sucesso"
+          },
+          "404": {
+            "description": "Utilizador não encontrado"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GetUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 123
+        },
+        "name": {
+          "type": "string",
+          "example": "Example Name"
+        },
+        "email": {
+          "type": "string",
+          "example": "example@mail.com"
+        }
+      }
+    },
+    "CreateUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Example Name"
+        },
+        "email": {
+          "type": "string",
+          "example": "example@mail.com"
+        }
+      }
+    }
+  }
+}

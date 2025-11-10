@@ -1,0 +1,293 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Movies Microservice API",
+    "description": "Swagger documentation for the Movies service",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3001",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Movies",
+      "description": "Endpoints related to movie management"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/movies": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of all movies",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Movie"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "New movie",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MovieInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Movie created successfully",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the movie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie obtained successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "object"
+                },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "integer"
+                        }
+                      }
+                    },
+                    "title": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    },
+                    "year": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "integer"
+                        }
+                      }
+                    },
+                    "reviews": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "array"
+                        },
+                        "items": {
+                          "$ref": "#/definitions/Review"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the movie"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated movie data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MovieInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID of the movie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully",
+            "schema": {
+              "$ref": "#/definitions/DeleteResponse"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Movie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "Treasure Planet"
+        },
+        "year": {
+          "type": "number",
+          "example": 2002
+        }
+      }
+    },
+    "MovieInput": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Treasure Planet"
+        },
+        "year": {
+          "type": "number",
+          "example": 2002
+        }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "movieId": {
+          "type": "number",
+          "example": 1
+        },
+        "userId": {
+          "type": "number",
+          "example": 2
+        },
+        "text": {
+          "type": "string",
+          "example": "Very underrated movie!"
+        }
+      }
+    },
+    "DeleteResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Movie deleted"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Movie not found"
+        }
+      }
+    }
+  }
+}
