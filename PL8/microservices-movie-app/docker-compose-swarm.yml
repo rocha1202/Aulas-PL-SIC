@@ -1,0 +1,56 @@
+
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass123
+    networks:
+      - micro-net
+    deploy:
+      replicas: 1
+
+  movies-service:
+    image: movies-service:1.0
+    ports:
+      - "3001:3001"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 2
+
+  reviews-service:
+    image: reviews-service:1.0
+    ports:
+      - "3002:3002"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 2
+
+  users-service:
+    image: users-service:1.0
+    ports:
+      - "3003:3003"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 2
+
+  api-gateway:
+    image: api-gateway:1.0
+    ports:
+      - "80:80"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 1
+
+networks:
+  micro-net:
+    driver: overlay
+    attachable: true
