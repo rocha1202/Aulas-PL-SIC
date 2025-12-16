@@ -1,0 +1,81 @@
+services:
+  mongodb:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass123
+    networks: [micro-net]
+
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672"    # AMQP
+  #     - "15672:15672"  # UI (http://localhost:15672)
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
+  #   networks: [micro-net]
+
+  movies-service:
+    build: ./movies-service
+    ports:
+      - "3001:3001"
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      MONGODB_URL: mongodb://root:pass123@mongodb:27017
+    depends_on:
+      - mongodb
+      - rabbitmq
+    networks: [micro-net]
+
+  reviews-service:
+    build: ./reviews-service
+    ports:
+      - "3002:3002"
+    environment:
+      MONGODB_URL: mongodb://root:pass123@mongodb:27017
+    depends_on:
+      - mongodb
+    networks: [micro-net]
+
+  users-service:
+    build: ./users-service
+    ports:
+      - "3003:3003"
+    environment:
+      MONGODB_URL: mongodb://root:pass123@mongodb:27017
+    depends_on:
+      - mongodb
+    networks: [micro-net]
+
+  notifications-service:
+    build: ./notifications-service
+    environment:
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    depends_on:
+      - rabbitmq
+    networks: [micro-net]
+  
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "80:80"
+    networks: [micro-net]
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP protocol
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - micro-net
+
+networks:
+   micro-net:

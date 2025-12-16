@@ -1,0 +1,14 @@
+
+# notifications-service/Dockerfile
+FROM node:20-alpine
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+
+ENV NODE_ENV=production
+CMD ["node", "app.js"]
+EXPOSE 3002
+# Expose port 3002 (Swarm will handle published ports)

@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:8
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pass123
+    networks:
+      - micro-net
+    deploy:
+      replicas: 1
+
+  movies-service:
+    image: movies-service:latest
+    ports:
+      - "3001:3001"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 2
+
+  reviews-service:
+    image: reviews-service:latest
+    ports:
+      - "3002:3002"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 1
+
+  users-service:
+    image: users-service:latest
+    ports:
+      - "3003:3003"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 1
+
+  api-gateway:
+    image: api-gateway:1.0
+    ports:
+      - "80:80"
+    networks:
+      - micro-net
+    deploy:
+      replicas: 2
+
+  rabbitmq:
+image: rabbitmq:3-management
+container_name: rabbitmq
+ports:
+  - "5672:5672" # AMQP protocol
+  - "15672:15672" # Management UI
+environment:
+  RABBITMQ_DEFAULT_USER: guest
+  RABBITMQ_DEFAULT_PASS: guest
+  networks:
+    - micro-net
+
+networks:
+  micro-net:
+    driver: overlay
+    attachable: true

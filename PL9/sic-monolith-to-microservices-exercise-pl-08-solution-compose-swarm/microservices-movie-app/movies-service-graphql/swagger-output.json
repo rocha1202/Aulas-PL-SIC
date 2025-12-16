@@ -1,0 +1,236 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "My API",
+    "description": "Swagger documentation",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3001",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Movies",
+      "description": "Movies related endpoints"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/movies": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "List of all movies",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetMovie"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "New movie object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateMovie"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Movie created successfully",
+            "schema": {
+              "$ref": "#/definitions/GetMovie"
+            }
+          },
+          "400": {
+            "description": "Title and year are required"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the movie"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single movie",
+            "schema": {
+              "$ref": "#/definitions/FullMovie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the movie"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated movie object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateMovie"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully",
+            "schema": {
+              "$ref": "#/definitions/GetMovie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Movies"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the movie"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Movie deleted successfully, no content"
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Review": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "movieId": {
+          "type": "string",
+          "example": "123"
+        },
+        "userId": {
+          "type": "string",
+          "example": "123"
+        },
+        "text": {
+          "type": "string",
+          "example": "Review text"
+        }
+      }
+    },
+    "GetMovie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "Example title"
+        },
+        "year": {
+          "type": "number",
+          "example": 123
+        }
+      }
+    },
+    "CreateMovie": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Example title"
+        },
+        "year": {
+          "type": "number",
+          "example": 123
+        }
+      }
+    },
+    "FullMovie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "Example title"
+        },
+        "year": {
+          "type": "number",
+          "example": 123
+        },
+        "reviews": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Review"
+          }
+        }
+      }
+    }
+  }
+}
